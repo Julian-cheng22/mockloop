@@ -207,15 +207,13 @@ issue "Empty draft point row silently blocks Save mock" "bug,priority:high" "Spr
 - [ ] Regression test reproduces the case above"
 
 echo "== Project board"
-PROJECT_NUM=$(gh project create --owner "$OWNER" --title "MockLoop Scrum" --format json --jq .number)
-for u in "${ISSUE_URLS[@]}"; do
-  gh project item-add "$PROJECT_NUM" --owner "$OWNER" --url "$u" >/dev/null
-done
-gh project link "$PROJECT_NUM" --owner "$OWNER" --repo "$REPO" >/dev/null || true
-
-cat <<EOF
-
-Done. Finish these steps in the browser:
+if gh auth status 2>&1 | grep -q "'project'"; then
+  bash "$(dirname "$0")/setup_project.sh" "$REPO"
+else
+  echo "  Skipped: token lacks the 'project' scope."
+  echo "  Run: gh auth refresh -h github.com -s project && bash scripts/setup_project.sh $REPO"
+  exit 0
+fi
   1. Open the project "MockLoop Scrum" → switch the view to **Board** layout.
   2. Edit the Status field options to: Backlog, Sprint Todo, In Progress, In Review, Done.
   3. Move issues #1–#9 (Sprint 1) to **Sprint Todo**, and #10–#16 to **Backlog**.
