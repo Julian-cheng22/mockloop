@@ -7,16 +7,23 @@
   day-to-day implementation in the IDE (Weeks 6+).
   Keep it short enough to read in one pass. When the AI keeps making the same mistake, add a rule here
   and record the change in the "Changelog" section at the bottom.
+  Claude Code only auto-loads CLAUDE.md, so the repo root also has a one-line CLAUDE.md containing
+  `@AGENTS.md` (added in v2 after the HW3 test showed the rules were otherwise not loaded).
 -->
+<!-- v2 = rule added or changed after the HW3 before/after test -->
+
 
 ## 0. TL;DR for agents
 
 1. Before writing code, read the GitHub Issue, the matching user story in `docs/PRD.md`, and the mockup in `docs/mockups/`.
 2. Put code where Section 2 says it goes. Do not create new top-level folders.
 3. Every pure function gets a unit test. Every feature gets at least one React Testing Library test.
-4. Handle **loading, error and empty** states on every screen.
+4. Handle **empty and error** states on every screen, and a **loading** state for anything asynchronous (AI calls). <!-- v2 -->
+   localStorage reads are synchronous: load them in the `useState` initializer, with no loading flash.
 5. Never invent feedback in AI output, and never ship the API key to the browser.
 6. Use the branch name `feature/<issue#>-short-desc` and the commit format `feat(scope): message (#<issue#>)`.
+7. Change only what the issue needs. Do not reformat or touch unrelated files. <!-- v2 -->
+8. Finish with a short report: files changed, tests run, assumptions, and what you could **not** verify. <!-- v2 -->
 
 ---
 
@@ -199,7 +206,12 @@ Examples: `feature/5-before-next-mock`, `fix/16-empty-point-blocks-save`, `chore
 - In code: only for non-obvious decisions, e.g. `// Ignore empty rows so they don't block save (#16)`. Do not put TODOs without an issue number: write `// TODO(#14): …`.
 
 ### Definition of Done
-All acceptance criteria are checked · tests are added and pass · lint is clean · there is no horizontal scroll at 375px · loading, error and empty states exist · the PR is reviewed and merged · the issue has moved to **Done**.
+All acceptance criteria are checked · tests are added and pass · lint is clean · there is no horizontal scroll at 375px · empty and error states exist (plus loading for async work) · the PR is reviewed and merged · the issue has moved to **Done**.
+
+<!-- v2 -->
+- **Visual check:** open the screen at 375px in a browser. If you can't (for example, a headless agent), write "Not visually verified at 375px" in the PR. Don't claim it was checked.
+- **Depends on a screen that doesn't exist yet** (e.g. the Log tab, issue #4): keep the callback prop optional, render the text without the link, and leave `// TODO(#<issue>): wire up …` at the call site.
+- **Mockup file missing:** say so in the PR and follow the written spec in §2 exactly (texts, sort order, labels). Don't invent new UI copy.
 
 ---
 
@@ -213,6 +225,9 @@ All acceptance criteria are checked · tests are added and pass · lint is clean
 - Use the helpers in `lib/dates.ts` for every date (local time, `YYYY-MM-DD`).
 - Keep the storage key and data format `mockloop.v1` backward compatible; add a migration if the shape changes.
 - When something in the issue is ambiguous, state your assumption in the PR description.
+- Treat `sessionIds` as a set: never add a duplicate id, and compute "heard N times" from unique ids (`new Set(point.sessionIds).size`). <!-- v2 -->
+- Copy UI text exactly as written in §2 and the issue ("heard N times", "No open points. Log your first mock →", "+ Add a plan"). <!-- v2 -->
+- Give React Testing Library tests names that quote the acceptance criterion they check. <!-- v2 -->
 
 ### ❌ Don't
 - Don't call `localStorage` or `fetch` from components.
@@ -250,4 +265,11 @@ All acceptance criteria are checked · tests are added and pass · lint is clean
 ## Changelog
 <!-- Record every refinement made after the HW3 before/after test. Graders look for evidence of iteration. -->
 - v1 (2026-11-04): initial rules from the PRD, the P1 prototype and P1 lessons learned.
-- v2: _fill in after the before/after test: what you added and why_
+- v2 (2026-11-04): changes after the HW3 before/after test on issue #5 (see docs/before-after-comparison.md):
+  - Added `CLAUDE.md` (`@AGENTS.md`): Claude Code does not read AGENTS.md on its own.
+  - Loading state only for async work: run B added a loading state for synchronous localStorage, so the screen flashed "Loading…" on every start.
+  - `sessionIds` is a set: run A deduplicated ids but run B didn't; the rule makes the safer behaviour the standard.
+  - Unbuilt dependencies: run B left an untracked comment ("wired up in their own issues") instead of `TODO(#issue)`.
+  - Don't touch unrelated files: run B's Prettier pass reformatted `storage.test.ts` (it reverted it, but only by luck).
+  - Missing mockup and visual checks: neither run could open a browser; both had to guess the layout because `docs/mockups/` is empty. Agents must now say what they did not verify.
+  - Exact UI copy and AC-named tests: moved from implied to explicit (run A invented its own empty-state text and "Heard once").
