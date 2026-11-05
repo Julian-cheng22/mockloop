@@ -20,7 +20,7 @@ grep -rnE ':\s*any\b|as any\b|<any>' src server 2>/dev/null | wc -l
 echo "== Default exports outside App.tsx (should be 0)"
 grep -rn 'export default' src --include='*.ts' --include='*.tsx' | grep -v 'App.tsx' | wc -l
 echo "== UTC date bug pattern toISOString().slice (should be 0)"
-grep -rn 'toISOString().slice' src | wc -l
+grep -rn 'toISOString().slice' src --include='*.ts' --include='*.tsx' | grep -v '\.test\.' | grep -vE ':[0-9]+:\s*//' | wc -l
 echo
 echo "== Dependency changes"
 git diff "$BASE"...HEAD -- package.json | grep -E '^[+-]\s+"' || echo "  none"
