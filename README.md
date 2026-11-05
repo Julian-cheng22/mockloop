@@ -12,3 +12,11 @@ Remember your mock-interview feedback. Paste messy notes, get improvement points
 - Rules file: [AGENTS.md](AGENTS.md)
 - Before/after comparison: [docs/before-after-comparison.md](docs/before-after-comparison.md)
 - Reflection: [docs/reflection.md](docs/reflection.md)
+
+## Getting started
+```bash
+npm install
+npm run dev      # http://localhost:5173
+npm test         # Vitest + React Testing Library
+npm run lint
+```
