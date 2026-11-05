@@ -8,7 +8,7 @@ Remember your mock-interview feedback. Paste messy notes, get improvement points
 - **P1 prototype:** https://claude.ai/artifact/N7sqmuvc35rduBwE2i1urr
 
 ## HW3 deliverables
-- Scrum setup: GitHub Project "MockLoop Scrum", milestones Sprint 1 / Sprint 2, issues #1–#16 (created by `scripts/setup_github.sh`)
+- Scrum setup: [MockLoop Scrum board](https://github.com/users/Julian-cheng22/projects/1/views/2), [milestones](https://github.com/Julian-cheng22/mockloop/milestones) Sprint 1 / Sprint 2, issues #1–#16 (created by `scripts/setup_github.sh`)
 - Rules file: [AGENTS.md](AGENTS.md)
 - Before/after comparison: [docs/before-after-comparison.md](docs/before-after-comparison.md)
 - Reflection: [docs/reflection.md](docs/reflection.md)
