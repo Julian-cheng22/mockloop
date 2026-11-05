@@ -1,4 +1,9 @@
+import { BeforeNextMock } from '../features/home/BeforeNextMock';
+import { useMockLoopStore } from './useMockLoopStore';
+
 export default function App() {
+  const { points } = useMockLoopStore();
+
   return (
     <div className="mx-auto min-h-screen max-w-screen-sm px-4 py-6">
       <header className="mb-6">
@@ -6,7 +11,8 @@ export default function App() {
         <p className="text-sm text-slate-600">Remember your mock-interview feedback.</p>
       </header>
       <main>
-        <p className="text-slate-700">Features land here issue by issue (see the Sprint board).</p>
+        {/* TODO(#4): wire up onLogFirstMock to the Log tab once it exists */}
+        <BeforeNextMock points={points} />
       </main>
     </div>
   );
