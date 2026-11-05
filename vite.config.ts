@@ -2,6 +2,9 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
+// Pin a US timezone for tests so local-vs-UTC date bugs are caught on every machine.
+process.env.TZ = 'America/New_York';
+
 export default defineConfig({
   plugins: [react()],
   server: {
